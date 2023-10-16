@@ -39,7 +39,7 @@ public class DAO {
     }
 
     public Account login(String user, String pass) {
-        String query = "select * from Account\n"
+        String query = "select * from Accounts\n"
                 + "where [username] = ?\n"
                 + "and password = ?";
         try {
