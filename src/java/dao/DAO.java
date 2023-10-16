@@ -37,7 +37,7 @@ public class DAO {
 
         return list;
     }
-
+//    duong them
     public Account login(String user, String pass) {
         String query = "select * from Accounts\n"
                 + "where [username] = ?\n"
