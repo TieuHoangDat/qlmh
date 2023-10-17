@@ -23,7 +23,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link href="css/manager.css" rel="stylesheet" type="text/css"/>
     </head>
-    <body>
+    <body class="modal-open">
         <jsp:include page="Menu.jsp"></jsp:include> 
         
         
@@ -46,7 +46,7 @@
 						<div class="col-xs-4">
                                                         
 							<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
-							<!--<a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>-->						
+							<a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>						
 						</div>
 					</div>
 				</div>
@@ -81,8 +81,8 @@
 							<td>${o.term}</td>
 							<td>
 								<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-								<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-							</td>
+								<a href="deletecourse" class="delete" data-toggle="modal"><i  class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+							</td>   
 						</tr> 
                                             </c:forEach>
 					</tbody>
@@ -103,42 +103,42 @@
 		</div>        
     </div>
 	<!-- Edit Modal HTML -->
-	<div id="addEmployeeModal" class="modal fade">
+	<div id="addEmployeeModal" class="modal fade in" >
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form>
+                            <form action="add" method = "post">
 					<div class="modal-header">						
-						<h4 class="modal-title">Add Employee</h4>
+						<h4 class="modal-title">Thêm môn học</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">					
 						<div class="form-group">
-							<label>Name</label>
-							<input type="text" class="form-control" required>
+							<label>Tên môn học</label>
+							<input type="text" class="form-control" name ="name" required >
 						</div>
 						<div class="form-group">
-							<label>Email</label>
-							<input type="email" class="form-control" required>
+							<label>Mã hôn học</label>
+							<input type="text" class="form-control"  name ="id" required>
 						</div>
 						<div class="form-group">
-							<label>Address</label>
-							<textarea class="form-control" required></textarea>
+							<label>Số tín chỉ</label>
+							<input type="text" class="form-control" name="numberOfCredit" required>
 						</div>
 						<div class="form-group">
-							<label>Phone</label>
-							<input type="text" class="form-control" required>
+							<label>Học kì</label>
+							<input type="text" class="form-control" name  ="semester" required>
 						</div>					
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-success" value="Add">
+						<input type="submit" class="btn btn-success" value="Add">   
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
 	<!-- Edit Modal HTML -->
-	<div id="editEmployeeModal" class="modal fade">
+	<div id="editEmployeeModal" class="modal fade in">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<form>
@@ -173,10 +173,10 @@
 		</div>
 	</div>
 	<!-- Delete Modal HTML -->
-        <div id="deleteEmployeeModal" class="modal fade" style="display: ${modelDelete};">
+        <div id="deleteEmployeeModal" class="modal fade in" style="display: block; padding-right: 15px;">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form>
+                            <form action="delete">
 					<div class="modal-header">						
 						<h4 class="modal-title">Delete Employee</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

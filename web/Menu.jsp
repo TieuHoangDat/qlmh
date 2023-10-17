@@ -20,7 +20,7 @@
         </li>
         <c:if test = "${sessionScope.acc.isAdmin == 1}"> 
             <li class="nav-item">
-              <a class="nav-link" href="#">Quản lý môn học</a>
+              <a class="nav-link" href="managercontrol">Quản lý môn học</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Quản lý nhóm học</a>

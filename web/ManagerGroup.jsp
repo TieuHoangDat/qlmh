@@ -173,7 +173,7 @@
 		</div>
 	</div>
 	<!-- Delete Modal HTML -->
-        <div id="deleteEmployeeModal" class="modal fade" style="display: ${modelDelete};">
+	<div id="deleteEmployeeModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<form>

@@ -22,10 +22,10 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <link href="css/manager.css" rel="stylesheet" type="text/css"/>
+        
     </head>
     <body>
         <jsp:include page="Menu.jsp"></jsp:include> 
-        
         
         <div class="container">
 		<div class="table-responsive">
@@ -37,16 +37,16 @@
 						</div>
                                             
                                                 <div class="col-xs-4">
-							<form class="form-inline">
-                                                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                                            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
-                                                        </form>
+                                                    <form class="form-inline" method="post" action="searchcourse">
+                                                        <input name="searchCourse" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                                                        <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
+                                                    </form>
 						</div>
                                                 
 						<div class="col-xs-4">
                                                         
 							<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
-							<!--<a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>-->						
+							<a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>						
 						</div>
 					</div>
 				</div>
@@ -62,7 +62,19 @@
 							<th>Tên môn học</th>
 							<th>Mã môn học</th>
 							<th>Số tín chỉ</th>
-							<th>Học kì</th>
+							<th>
+                                                            Học kì
+                                                            <!--<a href="searchcourse?">Lọc</a>-->
+                                                            <form method="post" action="filterBySemester">
+                                                                <select id ="mySelect" name="category" class="form-select" aria-label="Default select example">
+                                                                        <option >Tất cả</option>    
+                                                                    <c:forEach begin="1" end="10" var="o">
+                                                                        <option value=${o}><a href="searchcourse?semester=${o}">${o}</a></option>
+                                                                    </c:forEach>
+                                                                </select>
+                                                                
+                                                            </form>
+                                                        </th>
 							<th>Actions</th>
 						</tr>
 					</thead>
@@ -80,9 +92,9 @@
 							<td>${o.num_credit}</td>
 							<td>${o.term}</td>
 							<td>
-								<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-								<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-							</td>
+								<a href="editcourse?idEdit=${o.id}" class="edit"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+								<a href="deletecourse?idDelete=${o.id}" class="delete" ><i  class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+							</td>   
 						</tr> 
                                             </c:forEach>
 					</tbody>
@@ -102,92 +114,93 @@
 			</div>
 		</div>        
     </div>
-	<!-- Edit Modal HTML -->
-	<div id="addEmployeeModal" class="modal fade">
+	 <!--Edit Modal HTML--> 
+	<div id="addEmployeeModal" class="modal fade in" style="display: ${block};padding-right: 15px;">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form>
+                            <form action="add" method = "post">
 					<div class="modal-header">						
-						<h4 class="modal-title">Add Employee</h4>
+						<h4 class="modal-title">Thêm môn học</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">					
 						<div class="form-group">
-							<label>Name</label>
-							<input type="text" class="form-control" required>
+							<label>Tên môn học</label>
+							<input type="text" class="form-control" name ="name" required >
 						</div>
 						<div class="form-group">
-							<label>Email</label>
-							<input type="email" class="form-control" required>
+							<label>Mã hôn học</label>
+							<input type="text" class="form-control"  name ="id" required>
 						</div>
 						<div class="form-group">
-							<label>Address</label>
-							<textarea class="form-control" required></textarea>
+							<label>Số tín chỉ</label>
+							<input type="text" class="form-control" name="numberOfCredit" required>
 						</div>
 						<div class="form-group">
-							<label>Phone</label>
-							<input type="text" class="form-control" required>
+							<label>Học kì</label>
+							<input type="text" class="form-control" name  ="semester" required>
 						</div>					
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-success" value="Add">
+						<input type="submit" class="btn btn-success" value="Add">   
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
 	<!-- Edit Modal HTML -->
-	<div id="editEmployeeModal" class="modal fade">
+	<div id="editEmployeeModal" class="modal fade in" style="display: ${blockEdit};padding-right: 15px;">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form>
+                            <form action="editcourse?idEdit=${courseEdit.id}&edit=1" method = "post">
 					<div class="modal-header">						
-						<h4 class="modal-title">Edit Employee</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Chỉnh sửa</h4>
+						<button  type="button" class="close" data-dismiss="modal" aria-hidden="true"><a href="managercontrol?blockEdit=none">&times;</a></button>
 					</div>
 					<div class="modal-body">					
 						<div class="form-group">
-							<label>Name</label>
-							<input type="text" class="form-control" required>
+							<label>Tên môn học</label>
+                                                        <input value="${courseEdit.name}" type="text" class="form-control" name="nameEdit" required>
 						</div>
 						<div class="form-group">
-							<label>Email</label>
-							<input type="email" class="form-control" required>
+							<label>Mã môn học</label>
+                                                        <input value="${courseEdit.id}" type="text" class="form-control" required>
 						</div>
 						<div class="form-group">
-							<label>Address</label>
-							<textarea class="form-control" required></textarea>
+							<label>Số tín chỉ</label>
+                                                        <input  value="${courseEdit.num_credit}" type="text" class="form-control" name="numberOfCreditEdit" required>
 						</div>
 						<div class="form-group">
-							<label>Phone</label>
-							<input type="text" class="form-control" required>
+							<label>Học kì</label>
+                                                        <input value="${courseEdit.term}" type="text" class="form-control" name="semesterEdit"  required>
 						</div>					
 					</div>
 					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-info" value="Save">
+						<a href="managercontrol?blockDelete=none type="button" class="btn btn-default" data-dismiss="modal">Cancel<a/>
+                                                <input type="submit" class="btn btn-success" value="Add">  
+                                                <!--<a href="editcourse?idEdit=${courseEdit.id}&edit=1" type="submit" class="btn btn-info" value="Save">Submit</a>-->
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
 	<!-- Delete Modal HTML -->
-        <div id="deleteEmployeeModal" class="modal fade" style="display: ${modelDelete};">
+        <div id="deleteEmployeeModal" class="modal fade in" style="display: ${blockDelete};padding-right: 15px;">
 		<div class="modal-dialog">
-			<div class="modal-content">
-				<form>
+			<div class="modal-content">         
+                            <form action="delete">
 					<div class="modal-header">						
-						<h4 class="modal-title">Delete Employee</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Delete Course</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><a href="managercontrol?blockDelete=none">&times;</a></button>
 					</div>
 					<div class="modal-body">					
-						<p>Are you sure you want to delete these Records?</p>
+						<p>Are you sure you want to delete ${idDelete}</p>
 						<p class="text-warning"><small>This action cannot be undone.</small></p>
 					</div>
 					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-danger" value="Delete">
+						<a href="managercontrol?blockDelete=none type="button" class="btn btn-default" data-dismiss="modal">Cancel<a/>
+						<a href="deletecourse?idDelete=${idDelete}&delete=1" type="submit" class="btn btn-danger">Delete</a>
 					</div>
 				</form>
 			</div>
