@@ -38,10 +38,10 @@ public class RegisterControl extends HttpServlet {
             Account a = (Account) session.getAttribute("acc");
             int id = a.getId();
             DAO dao = new DAO();
-//            List<Course> list = dao.getCourseByStudentID(id);
+            List<Course> list = dao.getCourseByStudentID(id);
             
-//            request.setAttribute("listC", list);
-//            request.getRequestDispatcher("GroupRegistration.jsp").forward(request, response);
+            request.setAttribute("listC", list);
+            request.getRequestDispatcher("GroupRegistration.jsp").forward(request, response);
         }
     } 
 

@@ -27,7 +27,7 @@
             </li>
         </c:if>
         <li class="nav-item">
-          <a class="nav-link" href="#">Đăng ký môn học</a>
+          <a class="nav-link" href="register">Đăng ký môn học</a>
         </li>
         <c:if test = "${sessionScope.acc == null}"> 
             <li class="nav-item">

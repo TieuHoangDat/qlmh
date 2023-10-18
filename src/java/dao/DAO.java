@@ -37,6 +37,30 @@ public class DAO {
 
         return list;
     }
+
+    public List<Course> getCourseByStudentID(int id) {
+        List<Course> list = new ArrayList<>();
+        String query = "SELECT C.course_id, C.course_name, C.num_credit, C.term\n"
+                + "FROM Courses AS C\n"
+                + "JOIN CourseRegistrations AS CR\n"
+                + "    ON C.course_id = CR.course_id\n"
+                + "WHERE CR.account_id = ?;";
+        try {
+            conn = new DBContext().getConnection();//mo ket noi voi sql
+            ps = conn.prepareStatement(query); // chạy câu lệnh
+            ps.setInt(1, id);
+            rs = ps.executeQuery(); // bảng kết quả
+            while (rs.next()) {
+                list.add(new Course(rs.getString(1),
+                        rs.getString(2),
+                        rs.getInt(3),
+                        rs.getInt(4)));
+            }
+        } catch (Exception e) {
+        }
+
+        return list;
+    }
 //    duong them
 
     public Account login(String user, String pass) {
@@ -62,8 +86,8 @@ public class DAO {
 
         return null;
     }
-    
-    public void AddCourseInDatabase(String name , String id ,  String numberOfCredit , String semester){
+
+    public void AddCourseInDatabase(String name, String id, String numberOfCredit, String semester) {
         String query = "insert into Courses values (?,? ,?, ?)";
         try {
             conn = new DBContext().getConnection();
@@ -72,11 +96,11 @@ public class DAO {
             ps.setString(2, name); // xet dau hoi cham thu nhat la cid
             ps.setString(3, numberOfCredit); // xet dau hoi cham thu nhat la cid
             ps.setString(4, semester); // xet dau hoi cham thu nhat la cid
-            ps.executeUpdate();       
+            ps.executeUpdate();
         } catch (Exception e) {
         }
     }
-    
+
     public void DeleteCourse(String id) {
         String query = "delete from Courses where course_id = ?";
         try {
@@ -87,8 +111,8 @@ public class DAO {
         } catch (Exception e) {
         }
     }
-    
-    public void EditCourse(String name,String id ,int numCredit , int term ) {
+
+    public void EditCourse(String name, String id, int numCredit, int term) {
         String query = "update Courses set course_id = ? , course_name = ? , num_credit = ? , term = ?  where course_id = ?";
         try {
             conn = new DBContext().getConnection();
@@ -102,41 +126,41 @@ public class DAO {
         } catch (Exception e) {
         }
     }
-    
-    public Course getCourse(String id){
+
+    public Course getCourse(String id) {
         String query = "SELECT * FROM Courses where course_id = ?";
         try {
             conn = new DBContext().getConnection();
             ps = conn.prepareStatement(query);
             ps.setString(1, id);
             rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 return new Course(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getInt(4));
             }
         } catch (Exception e) {
         }
         return null;
     }
-    
-    public List<Course> getCourseByNameOrId(String searchCourse){
+
+    public List<Course> getCourseByNameOrId(String searchCourse) {
         List<Course> list = new ArrayList<>();
         String query = "select * from Courses where course_id = ? or course_name = ?";
         try {
             conn = new DBContext().getConnection();//mo ket noi voi sql
             ps = conn.prepareStatement(query); // chạy câu lệnh
             ps.setString(1, searchCourse);
-            ps.setString(2,searchCourse);
+            ps.setString(2, searchCourse);
             rs = ps.executeQuery(); // bảng kết quả
             while (rs.next()) {
-                list.add(new Course(rs.getString(1),rs.getString(2),rs.getInt(3),rs.getInt(4)));
+                list.add(new Course(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getInt(4)));
             }
         } catch (Exception e) {
         }
 
         return list;
-        
+
     }
-    
+
     public static void main(String[] args) {
         DAO dao = new DAO();
         List<Course> list = dao.getCourseByNameOrId("Giải tích");
