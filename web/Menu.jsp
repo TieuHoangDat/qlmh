@@ -1,7 +1,7 @@
 <%-- 
     Document   : Menu.jsp
     Created on : Oct 8, 2023, 9:38:56 AM
-    Author     : Tieu_Dat
+    Author     : Tieu
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
