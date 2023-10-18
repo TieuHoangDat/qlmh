@@ -10,6 +10,11 @@ public class Course {
 
     public Course() {
     }
+
+    public Course(String id) {
+        this.id = id;
+    }
+    
     
     
     public Course(String id, String name, int num_credit, int term) {

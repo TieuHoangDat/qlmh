@@ -3,6 +3,9 @@
 package control;
 
 import dao.DAO;
+import entity.Account;
+import entity.Course;
+import entity.Group;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -10,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -29,14 +33,19 @@ public class CourseControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
+        Account a = (Account) session.getAttribute("acc");
+        int id = a.getId();
         String courseID = request.getParameter("id");
-        // da lay category ve roi
-        DAO dao = new DAO();
-//        List<Product> list = dao.getProductByCID(cateID);
         
-//        request.setAttribute("listP", list);
-//        request.setAttribute("tag", courseID);
-//        request.getRequestDispatcher("Home.jsp").forward(request, response);
+        DAO dao = new DAO();
+        List<Group> listg = dao.getGroupByCourseID(courseID);
+        List<Course> listc = dao.getCourseByStudentID(id);
+            
+        request.setAttribute("listC", listc);       
+        request.setAttribute("listG", listg);
+        request.setAttribute("tag", courseID);
+        request.getRequestDispatcher("GroupRegistration.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

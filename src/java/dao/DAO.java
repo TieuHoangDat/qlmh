@@ -3,6 +3,7 @@ package dao;
 import context.DBContext;
 import entity.Account;
 import entity.Course;
+import entity.Group;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -59,6 +60,35 @@ public class DAO {
         } catch (Exception e) {
         }
 
+        return list;
+    }
+
+    public List<Group> getGroupByCourseID(String id) {
+        List<Group> list = new ArrayList<>();
+        String query = "SELECT * \n"
+                + "FROM Groups\n"
+                + "WHERE course_id = ?;";
+        try {
+            conn = new DBContext().getConnection();//mo ket noi voi sql
+            ps = conn.prepareStatement(query); // chạy câu lệnh
+            ps.setString(1, id);
+            rs = ps.executeQuery(); // bảng kết quả
+            while (rs.next()) {
+                list.add(new Group(rs.getString(1),
+                        rs.getString(2),
+                        new Course(rs.getString(3)),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getInt(6),
+                        rs.getString(7),
+                        rs.getInt(8),
+                        rs.getInt(9)));
+            }
+        } catch (Exception e) {
+        }
+        for(Group x : list) {
+            x.setCourse(getCourse(x.getCourse().getId()));
+        }
         return list;
     }
 //    duong them
@@ -163,10 +193,11 @@ public class DAO {
 
     public static void main(String[] args) {
         DAO dao = new DAO();
-        List<Course> list = dao.getCourseByNameOrId("Giải tích");
+        List<Group> list = dao.getGroupByCourseID("INT1332");
 //        dao.DeleteCourse("BAS2003");
 //        dao.EditCourse("Toán rời rạc", "INT1319", 10, 10);
-        for (Course o : list) {
+        System.out.println(list.size());
+        for (Group o : list) {
             System.out.println(o);
         }
     }

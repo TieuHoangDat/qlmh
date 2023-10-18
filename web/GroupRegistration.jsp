@@ -50,14 +50,16 @@
 								</span>
 							</th>
 							<th>Tên môn học</th>
-							<th>Mã môn học</th>
-							<th>Số tín chỉ</th>
-							<th>Học kì</th>
+							<th>Nhóm</th>
+							<th>Thời gian</th>
+							<th>Tên giảng viên</th>
+                                                        <th>Phòng</th>
+                                                        <th>Còn lại</th>
 							<th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>
-                                            <c:forEach items="${listC}" var="o">										
+                                            <c:forEach items="${listG}" var="o">										
 						<tr>
 							<td>
 								<span class="custom-checkbox">
@@ -65,12 +67,13 @@
 									<label for="checkbox5"></label>
 								</span>
 							</td>
-							<td>${o.name}</td>
-							<td>${o.id}</td>
-							<td>${o.num_credit}</td>
-							<td>${o.term}</td>
+							<td>${o.getCourse().name}</td>
+							<td>${o.group_name}</td>
+							<td>${o.time}</td>
+							<td>${o.teacher_name}</td>
+                                                        <td>${o.room}</td>
+                                                        <td>${o.available_slot}</td>
 							<td>
-								<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
 								<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 							</td>
 						</tr> 
@@ -92,76 +95,8 @@
 			</div>
 		</div>        
     </div>
-	<!-- Edit Modal HTML -->
-	<div id="addEmployeeModal" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<form>
-					<div class="modal-header">						
-						<h4 class="modal-title">Add Employee</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					</div>
-					<div class="modal-body">					
-						<div class="form-group">
-							<label>Name</label>
-							<input type="text" class="form-control" required>
-						</div>
-						<div class="form-group">
-							<label>Email</label>
-							<input type="email" class="form-control" required>
-						</div>
-						<div class="form-group">
-							<label>Address</label>
-							<textarea class="form-control" required></textarea>
-						</div>
-						<div class="form-group">
-							<label>Phone</label>
-							<input type="text" class="form-control" required>
-						</div>					
-					</div>
-					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-success" value="Add">
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-	<!-- Edit Modal HTML -->
-	<div id="editEmployeeModal" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<form>
-					<div class="modal-header">						
-						<h4 class="modal-title">Edit Employee</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					</div>
-					<div class="modal-body">					
-						<div class="form-group">
-							<label>Name</label>
-							<input type="text" class="form-control" required>
-						</div>
-						<div class="form-group">
-							<label>Email</label>
-							<input type="email" class="form-control" required>
-						</div>
-						<div class="form-group">
-							<label>Address</label>
-							<textarea class="form-control" required></textarea>
-						</div>
-						<div class="form-group">
-							<label>Phone</label>
-							<input type="text" class="form-control" required>
-						</div>					
-					</div>
-					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-info" value="Save">
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+	
+	
 	<!-- Delete Modal HTML -->
 	<div id="deleteEmployeeModal" class="modal fade">
 		<div class="modal-dialog">
