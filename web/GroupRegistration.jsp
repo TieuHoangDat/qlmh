@@ -35,7 +35,7 @@
                 </c:forEach>               
             </select>
             <c:forEach items="${listC}" var="o">
-                <li class="list-group-item text-white ${tag == o.id ? "active" : ""}"><a href="">${o.name}</a></li>
+                <li class="list-group-item text-white ${tag == o.id ? "active" : ""}"><a href="course?id=${o.id}">${o.name}</a></li>
             </c:forEach>  
 		<div class="table-responsive">
 			<div class="table-wrapper">
