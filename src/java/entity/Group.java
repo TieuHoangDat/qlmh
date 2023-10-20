@@ -24,6 +24,15 @@ public class Group {
         this.available_slot = available_slot;
     }
 
+    public Group(String group_id) {
+        this.group_id = group_id;
+    }
+
+    public Group() {
+    }
+    
+    
+
     public String getGroup_id() {
         return group_id;
     }
@@ -98,8 +107,10 @@ public class Group {
 
     @Override
     public String toString() {
-        return "Group{" + "group_id=" + group_id + ", group_name=" + group_name  + ", time=" + time + ", teacher_name=" + teacher_name + ", teacher_id=" + teacher_id + ", room=" + room + ", max_students=" + max_students + ", available_slot=" + available_slot + '}';
+        return "Group{" + "group_id=" + group_id + ", group_name=" + group_name + ", course=" + course + ", time=" + time + ", teacher_name=" + teacher_name + ", teacher_id=" + teacher_id + ", room=" + room + ", max_students=" + max_students + ", available_slot=" + available_slot + '}';
     }
+
+   
     
     
 }

@@ -4,6 +4,8 @@ import context.DBContext;
 import entity.Account;
 import entity.Course;
 import entity.Group;
+import entity.GroupRegistration;
+import jakarta.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -86,12 +88,62 @@ public class DAO {
             }
         } catch (Exception e) {
         }
-        for(Group x : list) {
+        for (Group x : list) {
             x.setCourse(getCourse(x.getCourse().getId()));
         }
         return list;
     }
-//    duong them
+
+
+    public Group getGroupByID(String id) {
+        String query = "SELECT Groups.*, Courses.*\n"
+                + "FROM Groups\n"
+                + "JOIN Courses ON Groups.course_id = Courses.course_id\n"
+                + "WHERE Groups.group_id = ?;";
+        try {
+            conn = new DBContext().getConnection();//mo ket noi voi sql
+            ps = conn.prepareStatement(query); // chạy câu lệnh
+            ps.setString(1, id);
+            rs = ps.executeQuery(); // bảng kết quả
+            while (rs.next()) {
+                return new Group(rs.getString(1),
+                        rs.getString(2),
+                        new Course(rs.getString(10), rs.getString(11), rs.getInt(12), rs.getInt(13)),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getInt(6),
+                        rs.getString(7),
+                        rs.getInt(8),
+                        rs.getInt(9));
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    public List<GroupRegistration> getGroupRegistrationByStudentID(int id) {
+        List<GroupRegistration> list = new ArrayList<>();
+        String query = "SELECT G.group_id, GR.[time]\n"
+                + "FROM GroupRegistrations GR\n"
+                + "INNER JOIN Groups G ON GR.group_id = G.group_id\n"
+                + "WHERE GR.account_id = ?;";
+        try {
+            conn = new DBContext().getConnection();//mo ket noi voi sql
+            ps = conn.prepareStatement(query); // chạy câu lệnh
+            ps.setInt(1, id);
+            rs = ps.executeQuery(); // bảng kết quả
+            while (rs.next()) {
+                list.add(new GroupRegistration(null,
+                        new Group(rs.getString(1)),
+                        rs.getTimestamp(2)));
+            }
+        } catch (Exception e) {
+        }
+        for (GroupRegistration x : list) {
+            x.setGroup(getGroupByID(x.getGroup().getGroup_id()));
+        }
+        return list;
+    }
 
     public Account login(String user, String pass) {
         String query = "select * from Accounts\n"
@@ -116,6 +168,7 @@ public class DAO {
 
         return null;
     }
+//    duong them
 
     public void AddCourseInDatabase(String name, String id, String numberOfCredit, String semester) {
         String query = "insert into Courses values (?,? ,?, ?)";
@@ -193,12 +246,14 @@ public class DAO {
 
     public static void main(String[] args) {
         DAO dao = new DAO();
-        List<Group> list = dao.getGroupByCourseID("INT1332");
+        List<GroupRegistration> list = dao.getGroupRegistrationByStudentID(101);
 //        dao.DeleteCourse("BAS2003");
 //        dao.EditCourse("Toán rời rạc", "INT1319", 10, 10);
         System.out.println(list.size());
-        for (Group o : list) {
+        for (GroupRegistration o : list) {
             System.out.println(o);
         }
+        Group a = dao.getGroupByID("INT1332_N01");
+        System.out.println(a);
     }
 }

@@ -112,7 +112,8 @@
 					</ul>
 				</div>
 			</div>
-		</div>        
+		</div>   
+        </div>  
     </div>
 	 <!--Edit Modal HTML--> 
 	<div id="addEmployeeModal" class="modal fade in" style="display: ${block};padding-right: 15px;">
@@ -184,7 +185,6 @@
 				</form>
 			</div>
 		</div>
-	</div>
 	<!-- Delete Modal HTML -->
         <div id="deleteEmployeeModal" class="modal fade in" style="display: ${blockDelete};padding-right: 15px;">
 		<div class="modal-dialog">

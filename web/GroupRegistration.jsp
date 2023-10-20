@@ -93,7 +93,66 @@
 					</ul>
 				</div>
 			</div>
-		</div>        
+		</div> 
+                
+                <div class="table-responsive">
+			<div class="table-wrapper">
+				
+				<table class="table table-striped table-hover">
+					<thead>
+						<tr>
+							<th>
+								<span class="custom-checkbox">
+									<input type="checkbox" id="selectAll">
+									<label for="selectAll"></label>
+								</span>
+							</th>
+							<th>Tên môn học</th>
+							<th>Nhóm</th>
+							<th>Thời gian</th>
+							<th>Tên giảng viên</th>
+                                                        <th>Phòng</th>
+                                                        <th>Thời gian đăng ký</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+                                            <c:forEach items="${listGR}" var="o">										
+						<tr>
+							<td>
+								<span class="custom-checkbox">
+									<input type="checkbox" id="checkbox5" name="options[]" value="1">
+									<label for="checkbox5"></label>
+								</span>
+							</td>
+							<td>${o.getGroup().getCourse().name}</td>
+							<td>${o.getGroup().group_name}</td>
+							<td>${o.getGroup().time}</td>
+							<td>${o.getGroup().teacher_name}</td>
+                                                        <td>${o.getGroup().room}</td>
+                                                        <td>${o.time}</td>
+							<td>
+								<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+							</td>
+						</tr> 
+                                            </c:forEach>
+					</tbody>
+				</table>
+				<div class="clearfix">
+					<div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+					<ul class="pagination">
+						<li class="page-item disabled"><a href="#">Previous</a></li>
+						<li class="page-item"><a href="#" class="page-link">1</a></li>
+						<li class="page-item"><a href="#" class="page-link">2</a></li>
+						<li class="page-item active"><a href="#" class="page-link">3</a></li>
+						<li class="page-item"><a href="#" class="page-link">4</a></li>
+						<li class="page-item"><a href="#" class="page-link">5</a></li>
+						<li class="page-item"><a href="#" class="page-link">Next</a></li>
+					</ul>
+				</div>
+			</div>
+		</div> 
+               
     </div>
 	
 	

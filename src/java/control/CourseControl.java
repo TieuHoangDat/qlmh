@@ -6,6 +6,7 @@ import dao.DAO;
 import entity.Account;
 import entity.Course;
 import entity.Group;
+import entity.GroupRegistration;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -41,7 +42,9 @@ public class CourseControl extends HttpServlet {
         DAO dao = new DAO();
         List<Group> listg = dao.getGroupByCourseID(courseID);
         List<Course> listc = dao.getCourseByStudentID(id);
+        List<GroupRegistration> list1 = dao.getGroupRegistrationByStudentID(id);
             
+        request.setAttribute("listGR", list1);            
         request.setAttribute("listC", listc);       
         request.setAttribute("listG", listg);
         request.setAttribute("tag", courseID);
