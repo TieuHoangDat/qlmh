@@ -11,6 +11,7 @@ public class Group {
     private int teacher_id;
     private String room;
     private int max_students, available_slot;
+    private boolean register;
 
     public Group(String group_id, String group_name, Course course, String time, String teacher_name, int teacher_id, String room, int max_students, int available_slot) {
         this.group_id = group_id;
@@ -22,6 +23,7 @@ public class Group {
         this.room = room;
         this.max_students = max_students;
         this.available_slot = available_slot;
+        this.register = false;
     }
 
     public Group(String group_id) {
@@ -108,6 +110,14 @@ public class Group {
     @Override
     public String toString() {
         return "Group{" + "group_id=" + group_id + ", group_name=" + group_name + ", course=" + course + ", time=" + time + ", teacher_name=" + teacher_name + ", teacher_id=" + teacher_id + ", room=" + room + ", max_students=" + max_students + ", available_slot=" + available_slot + '}';
+    }
+
+    public boolean isRegister() {
+        return register;
+    }
+
+    public void setRegister(boolean register) {
+        this.register = register;
     }
 
    

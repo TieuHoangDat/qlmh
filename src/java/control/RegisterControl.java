@@ -5,6 +5,7 @@ package control;
 import dao.DAO;
 import entity.Account;
 import entity.Course;
+import entity.Group;
 import entity.GroupRegistration;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -40,10 +41,22 @@ public class RegisterControl extends HttpServlet {
             int id = a.getId();
             DAO dao = new DAO();
             List<Course> list = dao.getCourseByStudentID(id);
-            List<GroupRegistration> list1 = dao.getGroupRegistrationByStudentID(id);
+            List<Group> listg = dao.getGroupByAccountID(id);
+            List<GroupRegistration> listgr = dao.getGroupRegistrationByStudentID(id);
             
-            request.setAttribute("listGR", list1);
+            for(Group x : listg) {
+                boolean ok = false;
+                for(GroupRegistration y : listgr) {
+                    if(x.getGroup_id().equals(y.getGroup().getGroup_id())) {
+                        ok = true;
+                    }
+                }
+                x.setRegister(ok);
+            }
+            
+            request.setAttribute("listGR", listgr);
             request.setAttribute("listC", list);
+            request.setAttribute("listG", listg);
             request.getRequestDispatcher("GroupRegistration.jsp").forward(request, response);
         }
     } 

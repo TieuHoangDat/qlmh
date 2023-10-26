@@ -4,7 +4,6 @@ package control;
 
 import dao.DAO;
 import entity.Account;
-import entity.Course;
 import entity.Group;
 import entity.GroupRegistration;
 import java.io.IOException;
@@ -15,15 +14,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.*;
 import java.util.List;
 
 /**
  *
  * @author Tieu_Dat
  */
-@WebServlet(name="CourseControl", urlPatterns={"/course"})
-public class CourseControl extends HttpServlet {
+@WebServlet(name="AddGroupRegisterControl", urlPatterns={"/addGroupRegister"})
+public class AddGroupRegisterControl extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,31 +33,56 @@ public class CourseControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        String grid = request.getParameter("grid");
         HttpSession session = request.getSession();
         Account a = (Account) session.getAttribute("acc");
-        int id = a.getId();
-        String courseID = request.getParameter("id");
-        
+        int accid = a.getId();
         DAO dao = new DAO();
-        List<Group> listg = dao.getGroupByCourseID(courseID);
-        List<Course> listc = dao.getCourseByStudentID(id);
-        List<GroupRegistration> listgr = dao.getGroupRegistrationByStudentID(id);
+        List<GroupRegistration> listgr = dao.getGroupRegistrationByStudentID(accid);
+        Group group = dao.getGroupByID(grid);
         
-        for(Group x : listg) {
-            boolean ok = false;
-            for(GroupRegistration y : listgr) {
-                if(x.getGroup_id().equals(y.getGroup().getGroup_id())) {
-                    ok = true;
-                }
+        // Kiểm tra để một môn không được đăng ký 2 nhóm
+        boolean check_course = false;
+        for(GroupRegistration x : listgr) {
+            if(group.getCourse().getId().equals(x.getGroup().getCourse().getId())) {
+                check_course = true;
             }
-            x.setRegister(ok);
         }
-            
-        request.setAttribute("listGR", listgr);            
-        request.setAttribute("listC", listc);       
-        request.setAttribute("listG", listg);
-        request.setAttribute("tag", courseID);
-        request.getRequestDispatcher("GroupRegistration.jsp").forward(request, response);
+        
+        // Kiểm tra nhóm còn slot để đăng ký không
+        boolean check_slot = false;
+        if(group.getAvailable_slot()<=0) {
+            check_slot = true;
+        }
+        
+        // Kiểm tra xem có trừng thời khóa biểu không
+        boolean check_time = false;
+        for(GroupRegistration x : listgr) {
+            if(group.getTime().equals(x.getGroup().getTime())) {
+                check_time = true;
+            }
+        }
+        
+        
+        if(check_course) {
+            request.setAttribute("blockAlert", "block");
+            request.setAttribute("mess", "Môn học đã được đăng ký");
+            request.getRequestDispatcher("register").forward(request, response);
+        }
+        else if(check_slot) {
+            request.setAttribute("blockAlert", "block");
+            request.setAttribute("mess", "Nhóm này đã hết chỗ");
+            request.getRequestDispatcher("register").forward(request, response);
+        }
+        else if(check_time) {
+            request.setAttribute("blockAlert", "block");
+            request.setAttribute("mess", "Trùng thời gian");
+            request.getRequestDispatcher("register").forward(request, response);
+        }
+        else {
+            dao.AddGroupRegister(accid, grid);
+            response.sendRedirect("register");
+        }
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -28,6 +28,8 @@
         
         
         <div class="container">
+            
+            <!--Danh sách các môn học mà sinh viên đăng ký-->
             <select >
                 <option value="apple">Tất cả</option>
                 <c:forEach items="${listC}" var="o">
@@ -37,6 +39,7 @@
             <c:forEach items="${listC}" var="o">
                 <li class="list-group-item text-white ${tag == o.id ? "active" : ""}"><a href="course?id=${o.id}">${o.name}</a></li>
             </c:forEach>  
+                <!--Danh sách các group theo môn học-->
 		<div class="table-responsive">
 			<div class="table-wrapper">
 				
@@ -44,10 +47,10 @@
 					<thead>
 						<tr>
 							<th>
-								<span class="custom-checkbox">
+<!--								<span class="custom-checkbox">
 									<input type="checkbox" id="selectAll">
 									<label for="selectAll"></label>
-								</span>
+								</span>-->
 							</th>
 							<th>Tên môn học</th>
 							<th>Nhóm</th>
@@ -55,17 +58,16 @@
 							<th>Tên giảng viên</th>
                                                         <th>Phòng</th>
                                                         <th>Còn lại</th>
-							<th>Actions</th>
+							
 						</tr>
 					</thead>
 					<tbody>
                                             <c:forEach items="${listG}" var="o">										
 						<tr>
 							<td>
-								<span class="custom-checkbox">
-									<input type="checkbox" id="checkbox5" name="options[]" value="1">
-									<label for="checkbox5"></label>
-								</span>
+                                                            <a onclick="a()" href="addGroupRegister?grid=${o.group_id}" >
+                                                                    <input class="btn btn-success ${o.register==true ? "active" : ""}" value="Add"  style="width: 60px;"> 
+                                                            </a>
 							</td>
 							<td>${o.getCourse().name}</td>
 							<td>${o.group_name}</td>
@@ -73,9 +75,7 @@
 							<td>${o.teacher_name}</td>
                                                         <td>${o.room}</td>
                                                         <td>${o.available_slot}</td>
-							<td>
-								<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-							</td>
+							
 						</tr> 
                                             </c:forEach>
 					</tbody>
@@ -95,6 +95,9 @@
 			</div>
 		</div> 
                 
+                
+                
+                <!--Danh sách các group đã đăng ký-->
                 <div class="table-responsive">
 			<div class="table-wrapper">
 				
@@ -132,7 +135,7 @@
                                                         <td>${o.getGroup().room}</td>
                                                         <td>${o.time}</td>
 							<td>
-								<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+								<a href="deleteGroupRegister?grid=${o.getGroup().group_id}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 							</td>
 						</tr> 
                                             </c:forEach>
@@ -153,83 +156,33 @@
 			</div>
 		</div> 
                
-    </div>
-	
-	
-	<!-- Delete Modal HTML -->
-	<div id="deleteEmployeeModal" class="modal fade">
+        </div>
+
+        
+                
+        <!-- Thông báo  -->
+        <div id="deleteEmployeeModal" class="modal fade in" style="display: ${blockAlert};padding-right: 15px;">
 		<div class="modal-dialog">
-			<div class="modal-content">
-				<form>
+			<div class="modal-content">         
+                            <form action="register">
 					<div class="modal-header">						
-						<h4 class="modal-title">Delete Employee</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Delete Course</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><a href="register">&times;</a></button>
 					</div>
 					<div class="modal-body">					
-						<p>Are you sure you want to delete these Records?</p>
-						<p class="text-warning"><small>This action cannot be undone.</small></p>
+						<p>${mess}</p>
+						<p class="text-warning"><small>This action cannot be done.</small></p>
 					</div>
 					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-danger" value="Delete">
+						<a href="register" type="submit" class="btn btn-danger">Ok</a>
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
-        <!-- Footer -->
-        <footer class="text-light">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-3 col-lg-4 col-xl-3">
-                        <h5>About</h5>
-                        <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
-                        <p class="mb-0">
-                            Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression.
-                        </p>
-                    </div>
-
-                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-                        <h5>Informations</h5>
-                        <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
-                        <ul class="list-unstyled">
-                            <li><a href="">Link 1</a></li>
-                            <li><a href="">Link 2</a></li>
-                            <li><a href="">Link 3</a></li>
-                            <li><a href="">Link 4</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto">
-                        <h5>Others links</h5>
-                        <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
-                        <ul class="list-unstyled">
-                            <li><a href="">Link 1</a></li>
-                            <li><a href="">Link 2</a></li>
-                            <li><a href="">Link 3</a></li>
-                            <li><a href="">Link 4</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="col-md-4 col-lg-3 col-xl-3">
-                        <h5>Contact</h5>
-                        <hr class="bg-white mb-2 mt-0 d-inline-block mx-auto w-25">
-                        <ul class="list-unstyled">
-                            <li><i class="fa fa-home mr-2"></i> My company</li>
-                            <li><i class="fa fa-envelope mr-2"></i> email@example.com</li>
-                            <li><i class="fa fa-phone mr-2"></i> + 33 12 14 15 16</li>
-                            <li><i class="fa fa-print mr-2"></i> + 33 12 14 15 16</li>
-                        </ul>
-                    </div>
-                    <div class="col-12 copyright mt-3">
-                        <p class="float-left">
-                            <a href="#">Back to top</a>
-                        </p>
-                        <p class="text-right text-muted">created with <i class="fa fa-heart"></i> by <a href="https://t-php.fr/43-theme-ecommerce-bootstrap-4.html"><i>t-php</i></a> | <span>v. 1.0</span></p>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        
+                
+        
     </body>
 </html>
 
