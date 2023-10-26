@@ -33,7 +33,10 @@
 				<div class="table-title">
 					<div class="row">
 						<div class="col-xs-4">
-							<h2>Manage <b>Course</b></h2>
+                                                    <a href="managercontrol">
+                                                        <h2>Manage <b>Course</b></h2>
+                                                    </a>
+							
 						</div>
                                             
                                                 <div class="col-xs-4">
@@ -115,7 +118,7 @@
 		</div>   
         </div>  
     </div>
-	 <!--Edit Modal HTML--> 
+	 <!--Add Modal HTML hdh--> 
 	<div id="addEmployeeModal" class="modal fade in" style="display: ${block};padding-right: 15px;">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -145,6 +148,26 @@
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
 						<input type="submit" class="btn btn-success" value="Add">   
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+        <div  id="deleteEmployeeModal" class="modal fade in" style="display: ${blockDelete};padding-right: 15px;">
+		<div class="modal-dialog">
+			<div class="modal-content">         
+                            <form action="delete">
+					<div class="modal-header">						
+						<h4 class="modal-title">Delete Course</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><a href="managercontrol?blockDelete=none">&times;</a></button>
+					</div>
+					<div class="modal-body">					
+						<p>Are you sure you want to delete ${idDelete}</p>
+						<p class="text-warning"><small>This action cannot be undone.</small></p>
+					</div>
+					<div class="modal-footer">
+						<a href="managercontrol?blockDelete=none type="button" class="btn btn-default" data-dismiss="modal">Cancel<a/>
+						<a href="deletecourse?idDelete=${idDelete}&delete=1" type="submit" class="btn btn-danger">Delete</a>
 					</div>
 				</form>
 			</div>
@@ -185,8 +208,10 @@
 				</form>
 			</div>
 		</div>
+        </div>
+        <!--ngu-->
 	<!-- Delete Modal HTML -->
-        <div id="deleteEmployeeModal" class="modal fade in" style="display: ${blockDelete};padding-right: 15px;">
+        <div class="modal fade in" style="display: ${blockDelete};padding-right: 15px;">
 		<div class="modal-dialog">
 			<div class="modal-content">         
                             <form action="delete">

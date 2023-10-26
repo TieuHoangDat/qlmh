@@ -6,6 +6,7 @@ package control;
 
 import dao.DAO;
 import entity.Course;
+import entity.Group;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -19,8 +20,8 @@ import java.util.List;
  *
  * @author ASUS
  */
-@WebServlet(name = "SearchCourseControl", urlPatterns = {"/searchcourse"})
-public class SearchCourseControl extends HttpServlet {
+@WebServlet(name = "ManagerGroupContrrol", urlPatterns = {"/managergroup"})
+public class ManagerGroupContrrol extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,14 +35,22 @@ public class SearchCourseControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        String searchCourse = request.getParameter("searchCourse");
-//        List<Course> list = new DAO().getCourseByNameOrId(searchCourse);
-        String semeter = request.getParameter("selectedValue");
-        List<Course> list = new DAO().getCourseByNameOrId(searchCourse);
+        DAO dao = new DAO();
+        List<Group> list = dao.getAllGroup();
+        String blockDelete = (String)request.getParameter("blockDelete");
+        String blockEdit = (String)request.getParameter("blockEdit");
+        String idDelete = (String)request.getParameter("idDelete");
+        String idEdit = (String)request.getParameter("idEdit");
+        Group group = dao.getGroupByID(idEdit);
         
-        request.setAttribute("listC", list);
-        request.getRequestDispatcher("ManagerCourse.jsp").forward(request, response);
+        request.setAttribute("listG", list);
+        request.setAttribute("idDelete", idDelete);
+        request.setAttribute("idEdit", idEdit);
+        request.setAttribute("blockDelete", blockDelete );
+        request.setAttribute("blockEdit", blockEdit);
+        request.setAttribute("group", group);
+        request.getRequestDispatcher("ManagerGroup.jsp").forward(request, response);
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
