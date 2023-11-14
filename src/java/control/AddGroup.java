@@ -5,7 +5,6 @@
 package control;
 
 import dao.DAO;
-import entity.Course;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,14 +12,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  *
  * @author ASUS
  */
-@WebServlet(name = "SearchCourseControl", urlPatterns = {"/searchcourse"})
-public class SearchCourseControl extends HttpServlet {
+@WebServlet(name = "AddGroup", urlPatterns = {"/addgroup"})
+public class AddGroup extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,14 +32,18 @@ public class SearchCourseControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        String searchCourse = request.getParameter("searchCourse");
-//        List<Course> list = new DAO().getCourseByNameOrId(searchCourse);
-        String semeter = request.getParameter("selectedValue");
-        List<Course> list = new DAO().getCourseByNameOrId(searchCourse);
+        String name_group = request.getParameter("name_group");
+        String course_id = request.getParameter("course_id");
+        String day = request.getParameter("day");
+        String time = request.getParameter("time");
+        String teacher_name = request.getParameter("teacher_name");
+        String teacher_id = request.getParameter("teacher_id");
+        String room = request.getParameter("room");
+        String quantity_student = request.getParameter("quantity_student");
+        new DAO().AddGroup(name_group, course_id, day, time, teacher_name, teacher_id, room, quantity_student);
         
-        request.setAttribute("listC", list);
-        request.getRequestDispatcher("ManagerCourse.jsp").forward(request, response);
+        
+        response.sendRedirect("managergroup");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

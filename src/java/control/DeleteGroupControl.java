@@ -5,7 +5,6 @@
 package control;
 
 import dao.DAO;
-import entity.Course;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,14 +12,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  *
  * @author ASUS
  */
-@WebServlet(name = "SearchCourseControl", urlPatterns = {"/searchcourse"})
-public class SearchCourseControl extends HttpServlet {
+@WebServlet(name = "DeleteGroupControl", urlPatterns = {"/deletegroup"})
+public class DeleteGroupControl extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,14 +32,19 @@ public class SearchCourseControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        String searchCourse = request.getParameter("searchCourse");
-//        List<Course> list = new DAO().getCourseByNameOrId(searchCourse);
-        String semeter = request.getParameter("selectedValue");
-        List<Course> list = new DAO().getCourseByNameOrId(searchCourse);
+       
+        String check = request.getParameter("check");
+        if(check==null){
+            String idDelete = request.getParameter("idDelete");
+            response.sendRedirect("managergroup?blockDelete=block&idDelete="+idDelete);
+        }else{
+            String id = request.getParameter("idDelete");
+            new DAO().DeleteGroup(id);
+            response.sendRedirect("managergroup?check="+check);
+        }
+//        request.setAttribute("blockDelete", "block");
         
-        request.setAttribute("listC", list);
-        request.getRequestDispatcher("ManagerCourse.jsp").forward(request, response);
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

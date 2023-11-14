@@ -33,14 +33,17 @@
 				<div class="table-title">
 					<div class="row">
 						<div class="col-xs-4">
-							<h2>Manage <b>Course</b></h2>
+                                                    <a href="managergroup">
+                                                        <h2>Manage <b>Course</b></h2>
+                                                    </a>
+							
 						</div>
                                             
                                                 <div class="col-xs-4">
-							<form class="form-inline">
-                                                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                                                    <form action="searchgroup" method="get" class="form-inline">
+                                                        <input name="search" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                                                             <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
-                                                        </form>
+                                                    </form>
 						</div>
                                                 
 						<div class="col-xs-4">
@@ -60,14 +63,16 @@
 								</span>
 							</th>
 							<th>Tên môn học</th>
-							<th>Mã môn học</th>
-							<th>Số tín chỉ</th>
-							<th>Học kì</th>
+							<th>Nhóm</th>
+							<th>Thời gian</th>
+							<th>Tên giảng viên</th>
+                                                        <th>Phòng</th>
+                                                        <th>Còn lại</th>
 							<th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>
-                                            <c:forEach items="${listC}" var="o">										
+                                            <c:forEach items="${listG}" var="o">										
 						<tr>
 							<td>
 								<span class="custom-checkbox">
@@ -75,13 +80,15 @@
 									<label for="checkbox5"></label>
 								</span>
 							</td>
-							<td>${o.name}</td>
-							<td>${o.id}</td>
-							<td>${o.num_credit}</td>
-							<td>${o.term}</td>
+							<td>${o.getCourse().name}</td>
+							<td>${o.group_name}</td>
+							<td>${o.time}</td>
+							<td>${o.teacher_name}</td>
+                                                        <td>${o.room}</td>
+                                                        <td>${o.available_slot}</td>
 							<td>
-								<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-								<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                                            <a href="editgroup?idEdit=${o.group_id}&blockEdit=block" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                                            <a href="deletegroup?idDelete=${o.group_id}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 							</td>
 						</tr> 
                                             </c:forEach>
@@ -102,78 +109,110 @@
 			</div>
 		</div>        
     </div>
-	<!-- Edit Modal HTML -->
+	<!-- Add Modal HTML -->
 	<div id="addEmployeeModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form>
+				<form action="addgroup" method = "get">
 					<div class="modal-header">						
-						<h4 class="modal-title">Add Employee</h4>
+						<h4 class="modal-title">Add Group</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">					
 						<div class="form-group">
-							<label>Name</label>
-							<input type="text" class="form-control" required>
+							<label>Tên nhóm</label>
+							<input name="name_group" type="text" class="form-control" required>
 						</div>
 						<div class="form-group">
-							<label>Email</label>
-							<input type="email" class="form-control" required>
+							<label>Mã môn học</label>
+                                                        <input name="course_id" type="text" class="form-control" required>
 						</div>
 						<div class="form-group">
-							<label>Address</label>
-							<textarea class="form-control" required></textarea>
+							<label>Thứ</label>
+                                                        <input name="day" type="text" class="form-control" required>
 						</div>
 						<div class="form-group">
-							<label>Phone</label>
-							<input type="text" class="form-control" required>
-						</div>					
+							<label>Kíp</label>
+                                                        <input name="time" type="text" class="form-control" required>
+						</div>	
+                                                <div class="form-group">
+							<label>Tên giáo viên</label>
+                                                        <input name="teacher_name" type="text" class="form-control" required>
+						</div>
+                                                <div class="form-group">
+							<label>Mã giáo viên</label>
+							<input name="teacher_id" type="text" class="form-control" required>
+						</div>
+                                                <div class="form-group">
+							<label>Phòng học</label>
+                                                        <input name="room" type="text" class="form-control" required>
+						</div>
+                                                <div class="form-group">
+							<label>Số lượng sinh viên</label>
+                                                        <input name="quantity_student" type="text" class="form-control" required>
+						</div>
 					</div>
 					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-success" value="Add">
-					</div>
+                                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                            <input type="submit" class="btn btn-success" value="Add">
 				</form>
 			</div>
 		</div>
 	</div>
+    </div>
 	<!-- Edit Modal HTML -->
-	<div id="editEmployeeModal" class="modal fade">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<form>
+        <div id="editEmployeeModal" class="modal fade in" style="display: ${blockEdit};">
+            <div class="modal-dialog">
+                <div class="modal-content"">
+				<form action="editgroup?idEdit=${group.group_id}&edit=1" method = "post">
 					<div class="modal-header">						
-						<h4 class="modal-title">Edit Employee</h4>
+						<h4 class="modal-title">Edit Group</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
-					<div class="modal-body">					
+					<div class="modal-body" style="max-height: 400px; overflow-y: auto;">					
 						<div class="form-group">
-							<label>Name</label>
-							<input type="text" class="form-control" required>
+							<label>Tên nhóm</label>
+                                                        <input value="${group.group_name}" name="name_group_edit" type="text" class="form-control" required>
 						</div>
 						<div class="form-group">
-							<label>Email</label>
-							<input type="email" class="form-control" required>
+							<label>Mã môn học</label>
+                                                        <input value="${group.course.id}" name="course_id_edit" type="text" class="form-control" required>
 						</div>
 						<div class="form-group">
-							<label>Address</label>
-							<textarea class="form-control" required></textarea>
+							<label>Thứ</label>
+                                                        <input value ="${group.time.substring(4,5)}" name="day_edit" type="text" class="form-control" required>
 						</div>
 						<div class="form-group">
-							<label>Phone</label>
-							<input type="text" class="form-control" required>
-						</div>					
+							<label>Kíp</label>
+                                                        <input value="${group.time.substring(11)}" name="time_edit" type="text" class="form-control" required>
+						</div>	
+                                                <div class="form-group">
+							<label>Tên giáo viên</label>
+                                                        <input value="${group.teacher_name}" name="teacher_name_edit" type="text" class="form-control" required>
+						</div>
+                                                <div class="form-group">
+							<label>Mã giáo viên</label>
+                                                        <input value="${group.teacher_id}" name="teacher_id_edit" type="text" class="form-control" required>
+						</div>
+                                                <div class="form-group">
+							<label>Phòng học</label>
+                                                        <input value="${group.room}" name="room_edit" type="text" class="form-control" required>
+						</div>
+                                                <div class="form-group">
+							<label>Số lượng sinh viên</label>
+                                                        <input value="${group.max_students}" name="quantity_student_edit" type="text" class="form-control" required>
+						</div>
 					</div>
 					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-info" value="Save">
+                                            <a href="managergroup" type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">Cancel</a>
+                                            <input type="submit" class="btn btn-success" value="Add">
 					</div>
 				</form>
 			</div>
 		</div>
 	</div>
 	<!-- Delete Modal HTML -->
-	<div id="deleteEmployeeModal" class="modal fade">
+        <div id="deleteEmployeeModal" class="modal fade in " style="display:${blockDelete} ">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<form>
@@ -186,8 +225,8 @@
 						<p class="text-warning"><small>This action cannot be undone.</small></p>
 					</div>
 					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-danger" value="Delete">
+                                            <a href="managergroup" class="btn btn-default" data-dismiss="modal" value="Cancel"> Cancel </a>
+                                            <a href="deletegroup?idDelete=${idDelete}&check=1" class="btn btn-danger" value="Delete"> Delete </a>
 					</div>
 				</form>
 			</div>
