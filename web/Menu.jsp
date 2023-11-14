@@ -30,7 +30,7 @@
           <a class="nav-link" href="register">Đăng ký môn học</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Xem thời khóa biểu tuần</a>
+          <a class="nav-link" href="studenttimetable">Xem thời khóa biểu tuần</a>
         </li>
         <c:if test = "${sessionScope.acc == null}"> 
             <li class="nav-item">

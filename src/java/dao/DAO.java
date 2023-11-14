@@ -94,7 +94,7 @@ public class DAO {
         return list;
     }
 
-    public Group getGroupByID(String id) {
+    public Group getGroupByID(String id) { // lấy thêm cả Course của group
         String query = "SELECT Groups.*, Courses.*\n"
                 + "FROM Groups\n"
                 + "JOIN Courses ON Groups.course_id = Courses.course_id\n"
@@ -119,10 +119,38 @@ public class DAO {
         }
         return null;
     }
-
-    public List<Group> getGroupByAccountID(int id) {
+    
+    public List<Group> getGroupByTeacherID(int id) { // lấy thêm cả Course của group
         List<Group> list = new ArrayList<>();
-        String query = "SELECT G.*\n"
+        String query = "SELECT Groups.*, Courses.*\n"
+                + "FROM Groups\n"
+                + "JOIN Courses ON Groups.course_id = Courses.course_id\n"
+                + "WHERE Groups.teacher_id  = ?;";
+        try {
+            conn = new DBContext().getConnection();//mo ket noi voi sql
+            ps = conn.prepareStatement(query); // chạy câu lệnh
+            ps.setInt(1, id);
+            rs = ps.executeQuery(); // bảng kết quả
+            while (rs.next()) {
+                Group a = new Group(rs.getString(1),
+                        rs.getString(2),
+                        new Course(rs.getString(10), rs.getString(11), rs.getInt(12), rs.getInt(13)),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getInt(6),
+                        rs.getString(7),
+                        rs.getInt(8),
+                        rs.getInt(9));
+                list.add(a);
+            }
+        } catch (Exception e) {
+        }
+        return list;
+    }
+
+    public List<Group> getGroupByAccountID(int id) { // lấy tất cả các Group của các Course mà sv đăng ký
+        List<Group> list = new ArrayList<>();
+        String query = "SELECT G.*, C.*\n"
                 + "FROM Groups G\n"
                 + "JOIN Courses C ON G.course_id = C.course_id\n"
                 + "JOIN CourseRegistrations CR ON C.course_id = CR.course_id\n"
@@ -135,7 +163,7 @@ public class DAO {
             while (rs.next()) {
                 list.add(new Group(rs.getString(1),
                         rs.getString(2),
-                        new Course(rs.getString(3)),
+                        new Course(rs.getString(10), rs.getString(11), rs.getInt(12), rs.getInt(13)),
                         rs.getString(4),
                         rs.getString(5),
                         rs.getInt(6),
@@ -144,9 +172,6 @@ public class DAO {
                         rs.getInt(9)));
             }
         } catch (Exception e) {
-        }
-        for (Group x : list) {
-            x.setCourse(getCourse(x.getCourse().getId()));
         }
         return list;
     }
