@@ -6,7 +6,7 @@ package entity;
  */
 public class Course {
     private String id, name;
-    private int num_credit, term;
+    private int num_credit, term, notcal;
 
     public Course() {
     }
@@ -22,6 +22,14 @@ public class Course {
         this.name = name;
         this.num_credit = num_credit;
         this.term = term;
+    }
+    
+    public Course(String id, String name, int num_credit, int term, int notcal) {
+        this.id = id;
+        this.name = name;
+        this.num_credit = num_credit;
+        this.term = term;
+        this.notcal = notcal;
     }
 
     public String getId() {
@@ -54,6 +62,14 @@ public class Course {
 
     public void setTerm(int term) {
         this.term = term;
+    }
+
+    public int getNotcal() {
+        return notcal;
+    }
+
+    public void setNotcal(int notcal) {
+        this.notcal = notcal;
     }
 
     @Override

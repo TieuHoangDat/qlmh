@@ -26,12 +26,21 @@
               <a class="nav-link" href="managergroup">Quản lý nhóm học</a>
             </li>
         </c:if>
-        <li class="nav-item">
-          <a class="nav-link" href="register">Đăng ký môn học</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="studenttimetable">Xem thời khóa biểu tuần</a>
-        </li>
+        <c:if test = "${sessionScope.acc.isAdmin == 0 && sessionScope.acc.isTeacher == 0}">
+            <li class="nav-item">
+              <a class="nav-link" href="register">Đăng ký môn học</a>
+            </li>
+        </c:if>
+        <c:if test = "${sessionScope.acc.isAdmin == 0}">
+            <li class="nav-item">
+              <a class="nav-link" href="studenttimetable">Xem thời khóa biểu tuần</a>
+            </li>
+        </c:if>
+        <c:if test = "${sessionScope.acc.isAdmin == 0 && sessionScope.acc.isTeacher == 0}">
+            <li class="nav-item">
+              <a class="nav-link" href="show_grade">Xem điểm</a>
+            </li>
+        </c:if>
         <c:if test = "${sessionScope.acc == null}"> 
             <li class="nav-item">
               <a class="nav-link" href="Login.jsp">Đăng nhập</a>

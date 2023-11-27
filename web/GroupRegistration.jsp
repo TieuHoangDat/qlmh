@@ -30,14 +30,12 @@
         <div class="container">
             
             <!--Danh sách các môn học mà sinh viên đăng ký-->
-            <select >
-                <option value="apple">Tất cả</option>
-                <c:forEach items="${listC}" var="o">
-                    <option value="apple">${o.name}</option>
-                </c:forEach>               
-            </select>
+            <h4>ĐĂNG KÝ MÔN HỌC HỌC KỲ 1 - NĂM HỌC 2023-2024</h4>
+            
             <c:forEach items="${listC}" var="o">
-                <li class="list-group-item text-white ${tag == o.id ? "active" : ""}"><a href="course?id=${o.id}">${o.name}</a></li>
+                <li class="list-group-item text-white ${tag == o.id ? "active" : ""}">
+                    <a style="color: ${tag == o.id ? 'white !important' : ''};" href="course?id=${o.id}">${o.name}</a>
+                </li>
             </c:forEach>  
                 <!--Danh sách các group theo môn học-->
 		<div class="table-responsive">
@@ -61,7 +59,7 @@
 							
 						</tr>
 					</thead>
-					<tbody>
+					<tbody>                                       
                                             <c:forEach items="${listG}" var="o">										
 						<tr>
 							<td>
@@ -69,35 +67,25 @@
                                                                     <input class="btn btn-success ${o.register==true ? "active" : ""}" value="Add"  style="width: 60px;"> 
                                                             </a>
 							</td>
-							<td>${o.getCourse().name}</td>
-							<td>${o.group_name}</td>
-							<td>${o.time}</td>
-							<td>${o.teacher_name}</td>
-                                                        <td>${o.room}</td>
-                                                        <td>${o.available_slot}</td>
+							<td style="color: ${o.register==true ? '#000000 !important' : ''};">${o.getCourse().name}</td>
+							<td style="color: ${o.register==true ? '#000000 !important' : ''};">${o.group_name}</td>
+							<td style="color: ${o.register==true ? '#000000 !important' : ''};">${o.time}</td>
+							<td style="color: ${o.register==true ? '#000000 !important' : ''};">${o.teacher_name}</td>
+                                                        <td style="color: ${o.register==true ? '#000000 !important' : ''};">${o.room}</td>
+                                                        <td style="color: ${o.register==true ? '#000000 !important' : ''};">${o.available_slot}</td>
 							
 						</tr> 
                                             </c:forEach>
 					</tbody>
 				</table>
-				<div class="clearfix">
-					<div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-					<ul class="pagination">
-						<li class="page-item disabled"><a href="#">Previous</a></li>
-						<li class="page-item"><a href="#" class="page-link">1</a></li>
-						<li class="page-item"><a href="#" class="page-link">2</a></li>
-						<li class="page-item active"><a href="#" class="page-link">3</a></li>
-						<li class="page-item"><a href="#" class="page-link">4</a></li>
-						<li class="page-item"><a href="#" class="page-link">5</a></li>
-						<li class="page-item"><a href="#" class="page-link">Next</a></li>
-					</ul>
-				</div>
+				
 			</div>
 		</div> 
                 
                 
                 
                 <!--Danh sách các group đã đăng ký-->
+                <h4>Danh sách môn học đã đăng ký</h4>
                 <div class="table-responsive">
 			<div class="table-wrapper">
 				
@@ -141,18 +129,7 @@
                                             </c:forEach>
 					</tbody>
 				</table>
-				<div class="clearfix">
-					<div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-					<ul class="pagination">
-						<li class="page-item disabled"><a href="#">Previous</a></li>
-						<li class="page-item"><a href="#" class="page-link">1</a></li>
-						<li class="page-item"><a href="#" class="page-link">2</a></li>
-						<li class="page-item active"><a href="#" class="page-link">3</a></li>
-						<li class="page-item"><a href="#" class="page-link">4</a></li>
-						<li class="page-item"><a href="#" class="page-link">5</a></li>
-						<li class="page-item"><a href="#" class="page-link">Next</a></li>
-					</ul>
-				</div>
+				
 			</div>
 		</div> 
                
@@ -166,7 +143,7 @@
 			<div class="modal-content">         
                             <form action="register">
 					<div class="modal-header">						
-						<h4 class="modal-title">Delete Course</h4>
+						<h4 class="modal-title">Thông báo lỗi</h4>
                                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><a href="register">&times;</a></button>
 					</div>
 					<div class="modal-body">					

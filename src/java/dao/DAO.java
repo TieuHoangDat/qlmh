@@ -3,6 +3,7 @@ package dao;
 import context.DBContext;
 import entity.Account;
 import entity.Course;
+import entity.CoursesRegistration;
 import entity.Group;
 import entity.GroupRegistration;
 import jakarta.servlet.http.HttpSession;
@@ -10,7 +11,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.*;
 
 /**
  *
@@ -21,6 +23,51 @@ public class DAO {
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
+    
+    public List<String> getTermByStudentID(int id) {
+        List<String> list = new ArrayList<>();
+        String query = "SELECT DISTINCT term\n" +
+                    "FROM CourseRegistrations\n" +
+                    "WHERE account_id = ?";
+        try {
+            conn = new DBContext().getConnection();//mo ket noi voi sql
+            ps = conn.prepareStatement(query); // chạy câu lệnh
+            ps.setInt(1, id);
+            rs = ps.executeQuery(); // bảng kết quả
+            while (rs.next()) {
+                list.add(rs.getString(1));
+            }
+        } catch (Exception e) {
+        }
+
+        return list;
+    }
+    
+    public List<CoursesRegistration> getCourseRegistrationByStudentID(int id, String term) {
+        List<CoursesRegistration> list = new ArrayList<>();
+        String query = "SELECT C.*, CR.*\n" +
+                        "FROM Courses C\n" +
+                        "INNER JOIN CourseRegistrations CR ON C.course_id = CR.course_id\n" +
+                        "WHERE CR.account_id = ?\n" +
+                        "AND CR.term = ?";
+        try {
+            conn = new DBContext().getConnection();//mo ket noi voi sql
+            ps = conn.prepareStatement(query); // chạy câu lệnh
+            ps.setInt(1, id);
+            ps.setString(2, term);
+            rs = ps.executeQuery(); // bảng kết quả
+            while (rs.next()) {
+                list.add(new CoursesRegistration(null, 
+                        new Course(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5)),
+                        rs.getString(8),
+                        rs.getDate(9),
+                        rs.getFloat(10)));
+            }
+        } catch (Exception e) {
+        }
+        
+        return list;
+    }
 
     public List<Course> getAllCourse() {
         List<Course> list = new ArrayList<>();
@@ -75,7 +122,7 @@ public class DAO {
                 + "FROM Courses AS C\n"
                 + "JOIN CourseRegistrations AS CR\n"
                 + "    ON C.course_id = CR.course_id\n"
-                + "WHERE CR.account_id = ?;";
+                + "WHERE CR.account_id = ? AND CR.term = N'Kỳ 1 năm học 2023-2024';";
         try {
             conn = new DBContext().getConnection();//mo ket noi voi sql
             ps = conn.prepareStatement(query); // chạy câu lệnh
@@ -469,21 +516,13 @@ public class DAO {
     }
     public static void main(String[] args) {
         DAO dao = new DAO();
-//        List<GroupRegistration> list = dao.getGroupRegistrationByStudentID(101);
-//        dao.DeleteCourse("BAS2003");
-//        dao.EditCourse("Toán rời rạc", "INT1319", 10, 10);
-//        System.out.println(list.size());
-//        for (GroupRegistration o : list) {
-//            System.out.println(o);
-//        }
-//        Group a = dao.getGroupByID("INT1332_N01");
-//        System.out.println(a);
-//        dao.DeleteGroup("INT1319_N10");
-//        dao.AddGroup("nhóm 10", "INT1319", "2", "7", "Sơn", "11", "402-A2", "40");
-//            new DAO().EditGroup("Nhóm 3", "x", "2", "7", "Sơn", "12", "402-A2", "9111");
-//          System.out.println(dao.getGroupByID("INT1319_N02"));
-        List<Group> list = dao.getGroupBySearchName("Toán");
-        for(Group x : list){
+        System.out.println("hello");
+        List<String> li = dao.getTermByStudentID(101);
+        for(String x : li) {
+            System.out.println(x);
+        }
+        List<CoursesRegistration> list = dao.getCourseRegistrationByStudentID(101, "Kỳ 1 năm học 2021-2022");
+        for(CoursesRegistration x : list){
             System.out.println(x);
         }
     }

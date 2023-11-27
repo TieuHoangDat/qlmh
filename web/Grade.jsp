@@ -25,24 +25,18 @@
     </head>
     <body>
         <jsp:include page="Menu.jsp"></jsp:include> 
-        
-        
         <div class="container">
+            <a onclick="a()" href="exportExcel" >
+                    <input class="btn btn-success" value="Xuất Excel"  style="width: 110px;"> 
+            </a>
+            <c:forEach items="${listT}" var="i">
+                
 		<div class="table-responsive">
 			<div class="table-wrapper">
 				<div class="table-title">
 					<div class="row">
-						<div class="col-xs-6">
-							<h2>Manage <b>Course</b></h2>
-						</div>
-                                            
-                                                <div class="col-xs-6">
-							<form class="form-inline">
-                                                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                                                            <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
-                                                        </form>
-						</div>
-                                                
+						
+                                                <h4>${i.getTerm()}</h4>
 						
 					</div>
 				</div>
@@ -55,14 +49,16 @@
 									<label for="selectAll"></label>
 								</span>
 							</th>
-							<th>Tên môn học</th>
 							<th>Mã môn học</th>
+							<th>Tên môn học</th>
 							<th>Số tín chỉ</th>
-							<th>Học kì</th>
+							<th>Điểm TK(10)</th>
+							<th>Điểm TK(4)</th>
+                                                        <th>Điểm TK(C)</th>
 						</tr>
 					</thead>
 					<tbody>
-                                            <c:forEach items="${listC}" var="o">										
+                                            <c:forEach items="${i.getLi()}" var="o">										
 						<tr>
 							<td>
 								<span class="custom-checkbox">
@@ -70,21 +66,35 @@
 									<label for="checkbox5"></label>
 								</span>
 							</td>
-							<td>${o.name}</td>
-							<td>${o.id}</td>
-							<td>${o.num_credit}</td>
-							<td>${o.term}</td>
-							
+							<td>${o.getCourse().getId()}</td>
+							<td>${o.getCourse().getName()}</td>
+							<td>${o.getCourse().getNum_credit()}</td>
+							<td>${o.grade_10}</td>
+                                                        <td>${o.grade_4}</td>
+                                                        <td>${o.grade_alpha}</td>
 						</tr> 
                                             </c:forEach>
 					</tbody>
 				</table>
-				
+                                <div class="clearfix">
+                                    <div class="col-xs-6">
+                                            <h5>- Điểm trung bình học kỳ hệ 4:  ${i.avg_4}</h5>
+                                            <h5>- Điểm trung bình học kỳ hệ 10: ${i.avg_10}</h5>
+                                            <h5>- Số tín chỉ đạt học kỳ:        ${i.total_credit}</h5>
+                                    </div>
+                                    <div class="col-xs-6">
+                                            <h5>- Điểm trung bình tích lũy hệ 4:  ${i.tl_4}</h5>
+                                            <h5>- Điểm trung bình tích lũy hệ 10: ${i.tl_10}</h5>
+                                            <h5>- Số tín chỉ tích lũy:            ${i.tl_credit}</h5>
+                                    </div>
+                                    
+				</div>
 			</div>
-		</div>        
+		</div> 
+        </c:forEach>
     </div>
-	
-	
+        
+        
         <jsp:include page="Footer.jsp"></jsp:include>
     </body>
 </html>
