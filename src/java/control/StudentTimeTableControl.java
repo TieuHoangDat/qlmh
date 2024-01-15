@@ -56,6 +56,7 @@ public class StudentTimeTableControl extends HttpServlet {
                 }
             }
             
+            request.setAttribute("tkbactive", "active");
             request.setAttribute("b", b);
             request.getRequestDispatcher("StudentTimeTable.jsp").forward(request, response);
     } 

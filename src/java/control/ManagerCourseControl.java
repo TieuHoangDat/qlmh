@@ -46,6 +46,7 @@ public class ManagerCourseControl extends HttpServlet {
         
       
         // b2: set data to jsp
+        request.setAttribute("managercourseactive", "active");
         request.setAttribute("courseEdit", courseEdit);
         request.setAttribute("course", course);
         request.setAttribute("idDelete", idDelete);

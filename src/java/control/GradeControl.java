@@ -57,6 +57,7 @@ public class GradeControl extends HttpServlet {
             t.setTl_credit(tl);
         }
         
+        request.setAttribute("gradeactive", "active");
         request.setAttribute("listT", listterm);
         request.getRequestDispatcher("Grade.jsp").forward(request, response);
     } 

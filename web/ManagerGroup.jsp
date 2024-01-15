@@ -34,7 +34,7 @@
 					<div class="row">
 						<div class="col-xs-4">
                                                     <a href="managergroup">
-                                                        <h2>Manage <b>Course</b></h2>
+                                                        <h2>Manage <b>Group</b></h2>
                                                     </a>
 							
 						</div>
@@ -48,7 +48,7 @@
                                                 
 						<div class="col-xs-4">
                                                         
-							<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
+							<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Group</span></a>
 							<!--<a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>-->						
 						</div>
 					</div>
@@ -69,6 +69,7 @@
                                                         <th>Phòng</th>
                                                         <th>Còn lại</th>
 							<th>Actions</th>
+                                                        <th>Thêm điểm</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -90,6 +91,9 @@
                                                             <a href="editgroup?idEdit=${o.group_id}&blockEdit=block" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                                             <a href="deletegroup?idDelete=${o.group_id}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 							</td>
+                                                        <td>
+                                                            <a class="btn btn-primary" href="addgrade?idaddgrade=${o.group_id}" role="button" style="color: white">Thêm điểm</a>
+                                                        </td>
 						</tr> 
                                             </c:forEach>
 					</tbody>
@@ -167,7 +171,7 @@
 				<form action="editgroup?idEdit=${group.group_id}&edit=1" method = "post">
 					<div class="modal-header">						
 						<h4 class="modal-title">Edit Group</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><a href="managergroup">&times;</a></button>
 					</div>
 					<div class="modal-body" style="max-height: 400px; overflow-y: auto;">					
 						<div class="form-group">
@@ -206,6 +210,7 @@
 					<div class="modal-footer">
                                             <a href="managergroup" type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">Cancel</a>
                                             <input type="submit" class="btn btn-success" value="Add">
+                                            
 					</div>
 				</form>
 			</div>
@@ -232,6 +237,79 @@
 			</div>
 		</div>
 	</div>
+        <!--add grade-->
+        <div id="addEmployeeModal" class="modal fade in" style="display: ${blockAddGrade}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="addgrade?idaddgrade=${idaddgrade}&check=1" method = "post">
+                        <div class="modal-header">						
+                            <h4 class="modal-title">Add Grade</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><a href="managergroup">&times;</a></button>
+                        </div>
+                        <div class="modal-body">					
+                            <div class="form-group">
+                                <label>Nhập đường dẫn file điểm(File excel)</label>
+                                <input name="filepath" type="text" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="managergroup" type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">Cancel</a>
+                            <input type="submit" class="btn btn-success" value="Thêm">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!--show grade-->
+        
+        <div id="addEmployeeModal" class="modal fade in" style="display: ${blockReviewGrade};
+                                                                width: 1200px !important;
+                                                                margin-left: auto;
+                                                                margin-right: auto;
+        ">
+            <div class="modal-dialog" style="max-width: 90%;max-height: 500px;
+        overflow-y: auto;">
+                <div class="modal-content">
+                    <form action="updategrade" method="get">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Grade</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><a href="managergroup">&times;</a></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table" style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th style="width:25%; padding: 0px !important ">Mã Sinh Viên</th>
+                                        <th style="width:35%; padding: 0px !important">Tên</th>
+                                        <th style="width:25%; padding: 0px !important">Mã Nhóm </th>
+                                        <th style="width:15%; padding: 0px !important">Grade(Hệ 10)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach items="${listCR}" var="o" varStatus="loop">
+                                        <tr>
+                                            <td><input value="${o.getAcccount().id}" style="padding: 0px !important" value="" name="id_${loop.index}" type="text" class="form-control" required></td>
+                                            <td><input value="${o.getAcccount().name}" style="padding: 0px !important" name="name_${loop.index}" type="text" class="form-control" required></td>
+                                            <td><input value="${idGroup}" style="padding: 0px !important" name="idGroup_${loop.index}" type="text" class="form-control" required></td>
+                                            <td><input value="${o.grade_10}" style="padding: 0px !important" name="grade_${loop.index}" type="text" class="form-control" required></td>
+                                        </tr>
+                                    </c:forEach>
+              
+                                </tbody>
+                                
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="managergroup" type="button" class="btn btn-default" data-dismiss="modal">Cancel</a>
+                            <input type="submit" class="btn btn-success" value="Xác nhận">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+       
         <jsp:include page="Footer.jsp"></jsp:include>
     </body>
 </html>

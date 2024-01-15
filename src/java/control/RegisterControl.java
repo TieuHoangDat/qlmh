@@ -53,7 +53,8 @@ public class RegisterControl extends HttpServlet {
                 }
                 x.setRegister(ok);
             }
-                     
+            
+            request.setAttribute("registercourseactive", "active");
             request.setAttribute("listGR", listgr);
             request.setAttribute("listC", list);
             request.setAttribute("listG", listg);

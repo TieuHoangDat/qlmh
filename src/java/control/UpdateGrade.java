@@ -5,8 +5,6 @@
 package control;
 
 import dao.DAO;
-import entity.Course;
-import entity.Group;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,14 +12,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  *
  * @author ASUS
  */
-@WebServlet(name = "ManagerGroupContrrol", urlPatterns = {"/managergroup"})
-public class ManagerGroupContrrol extends HttpServlet {
+@WebServlet(name = "UpdateGrade", urlPatterns = {"/updategrade"})
+public class UpdateGrade extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,25 +33,24 @@ public class ManagerGroupContrrol extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         DAO dao = new DAO();
-        List<Group> list = dao.getAllGroup();
-        String blockDelete = (String)request.getParameter("blockDelete");
-        String blockEdit = (String)request.getParameter("blockEdit");
-        String idDelete = (String)request.getParameter("idDelete");
-        String idEdit = (String)request.getParameter("idEdit");
-        String blockAddGrade = (String)request.getParameter("blockGrade");
-        String idaddgrade = (String)request.getParameter("idaddgrade");
-        Group group = dao.getGroupByID(idEdit);
+        int i = 0;
+        while(true){
+            String id = request.getParameter("id_"+i);
+            String name = request.getParameter("name_"+i);
+            String idGroup = request.getParameter("idGroup_"+i);
+            String grade = request.getParameter("grade_"+i);
+            if(id==null){
+                break;
+            }
+            String idCourse = idGroup.substring(0,7);
+            double diem = Double.parseDouble(grade);
+
+            dao.editCourseRegister(id, idCourse, diem);
+            i++;
+        }
+            
+            response.sendRedirect("managergroup");
         
-        request.setAttribute("managergroupactive", "active");
-        request.setAttribute("listG", list);
-        request.setAttribute("idDelete", idDelete);
-        request.setAttribute("idEdit", idEdit);
-        request.setAttribute("blockDelete", blockDelete );
-        request.setAttribute("blockEdit", blockEdit);
-        request.setAttribute("group", group);
-        request.setAttribute("blockAddGrade", blockAddGrade);
-        request.setAttribute("idaddgrade", idaddgrade);
-        request.getRequestDispatcher("ManagerGroup.jsp").forward(request, response);
         
     }
 

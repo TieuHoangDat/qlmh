@@ -4,15 +4,24 @@ import context.DBContext;
 import entity.Account;
 import entity.Course;
 import entity.CoursesRegistration;
+import entity.Grade;
 import entity.Group;
 import entity.GroupRegistration;
 import jakarta.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -391,12 +400,12 @@ public class DAO {
 
     public List<Course> getCourseByNameOrId(String searchCourse) {
         List<Course> list = new ArrayList<>();
-        String query = "select * from Courses where course_id = ? or course_name = ?";
+        String query = "select * from Courses where course_id like ? or course_name like ?";
         try {
             conn = new DBContext().getConnection();//mo ket noi voi sql
             ps = conn.prepareStatement(query); // chạy câu lệnh
-            ps.setString(1, searchCourse);
-            ps.setString(2, searchCourse);
+            ps.setString(1, "%"+searchCourse+"%");
+            ps.setString(2, "%"+searchCourse+"%");
             rs = ps.executeQuery(); // bảng kết quả
             while (rs.next()) {
                 list.add(new Course(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getInt(4)));
@@ -514,16 +523,139 @@ public class DAO {
         }
         return list;
     }
+    
+    public void editCourseRegister(String maSv,String maMon,double diem){
+        String query = """
+                       update CourseRegistrations
+                       set grade = ?
+                       where account_id = ? and course_id = ?
+                       """;
+        
+        try {
+            conn = new DBContext().getConnection();
+            ps = conn.prepareStatement(query);
+             // xet dau hoi cham thu nhat la cid
+            ps.setString(2, maSv); // xet dau hoi cham thu nhat la cid
+            ps.setString(3, maMon); // xet dau hoi cham thu nhat la cid
+            ps.setDouble(1, diem);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+    
+    public CoursesRegistration getCoursesRegistrationByGroupId(String groupId,String maSv,double diem){
+//        CoursesRegistration list = new CoursesRegistration();
+        String query = """
+                        select A.*,C.*,CR.term,CR.registration_date,CR.grade
+                             from GroupRegistrations as GR
+                             inner join Groups as G on G.group_id = GR.group_id
+                             inner join Accounts as A on A.account_id = GR.account_id
+                             inner join CourseRegistrations as CR on CR.account_id = A.account_id and CR.course_id = G.course_id
+                             inner join Courses as C on C.course_id = CR.course_id
+                             where G.group_id = ? and A.account_id = ?
+                       """;
+        try {
+            conn = new DBContext().getConnection();//mo ket noi voi sql
+            ps = conn.prepareStatement(query); // chạy câu lệnh
+            ps.setString(1, groupId);
+            ps.setString(2,maSv);
+            rs = ps.executeQuery(); // bảng kết quả
+            while (rs.next()) {
+                return new CoursesRegistration(new Account(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), rs.getInt(6)), 
+                        new Course(rs.getString(7), rs.getString(8), rs.getInt(9), rs.getInt(10),rs.getInt(11)),
+                        rs.getString(12),
+                        rs.getDate(13),
+                        diem);
+            }
+        } catch (Exception e) {
+        }
+        
+        return null;
+    }
+    
+    public List<CoursesRegistration> readExcel(String filePath, String idGroup) {
+        List<CoursesRegistration> list =new ArrayList<>();
+        try {
+            String idCourse = idGroup.substring(0,7);
+            // Đường dẫn đến tệp Excel
+            String excelFilePath = filePath;
+
+            // Tạo một FileInputStream để đọc tệp Excel
+            FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
+
+            // Tạo một đối tượng Workbook từ FileInputStream
+            XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+
+            // Chọn một sheet (ví dụ: sheet đầu tiên)
+            Sheet sheet = workbook.getSheetAt(0);
+
+            // Lặp qua từng hàng của sheet
+            int dem = -1;
+            for (Row row : sheet) {
+                String ma="",firstName="" , lastName="" ;
+                double diem=-1;
+                dem++;
+                // Lặp qua từng ô của hàng
+                if(dem < 10){
+                    continue;
+                }
+                int cot = -1;
+                for (Cell cell : row) {
+                    cot++;
+                    if(cot==1){
+                        if (cell.getCellType() == CellType.NUMERIC) {
+                        double numericValue = cell.getNumericCellValue();
+                        // Kiểm tra xem giá trị có phải là số nguyên hay không
+                        if (numericValue == Math.floor(numericValue) && !Double.isInfinite(numericValue)) {
+                            // Giá trị là số nguyên, sử dụng String.format để in ra
+                            ma = String.format(Locale.US, "%.0f ", numericValue);
+//                         System.out.print(String.format(Locale.US, "%.0f ", numericValue));
+                        }
+                        }
+                    }
+                    if(cot==2){
+                        firstName = cell.toString();
+                    }
+                    if(cot==3){
+                        lastName = cell.toString();
+                    }
+                    if(cot==10){
+                        try{
+                            diem = Double.parseDouble(cell.toString());
+                        }catch(Exception e){
+                            
+                        }
+                        
+                    }
+                    if(!ma.equals("") && diem>=0 ){
+//                        new DAO().editCourseRegister(ma, idCourse, diem);
+//                          list.add(new Grade(ma,idGroup,diem));
+                          list.add(new DAO().getCoursesRegistrationByGroupId(idGroup, ma,diem));
+                    }
+                    
+                    
+                }
+            }
+
+            // Đóng FileInputStream và Workbook sau khi hoàn thành
+            inputStream.close();
+            workbook.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    
+    
     public static void main(String[] args) {
         DAO dao = new DAO();
-        System.out.println("hello");
-        List<String> li = dao.getTermByStudentID(101);
-        for(String x : li) {
-            System.out.println(x);
-        }
-        List<CoursesRegistration> list = dao.getCourseRegistrationByStudentID(101, "Kỳ 1 năm học 2021-2022");
+//        CoursesRegistration cr = dao.getCoursesRegistrationByGroupId("INT1319_N01","101");
+        List<CoursesRegistration> list = dao.readExcel("C:\\Users\\ASUS\\Desktop\\Book2.xlsx", "INT1319_N01");
         for(CoursesRegistration x : list){
             System.out.println(x);
         }
+//        System.out.println(cr);
+//        dao.editCourseRegister("101", "BAS1105",2.5);
     }
 }

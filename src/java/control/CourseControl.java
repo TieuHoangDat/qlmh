@@ -54,7 +54,8 @@ public class CourseControl extends HttpServlet {
             }
             x.setRegister(ok);
         }
-            
+        
+        request.setAttribute("registercourseactive", "active");    
         request.setAttribute("listGR", listgr);            
         request.setAttribute("listC", listc);       
         request.setAttribute("listG", listg);

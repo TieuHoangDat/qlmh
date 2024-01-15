@@ -35,6 +35,7 @@ public class HomeControl extends HttpServlet {
         List<Course> list = dao.getAllCourse();
         // b2: set data to jsp
         request.setAttribute("listC", list);
+        request.setAttribute("homeactive", "active");
         request.getRequestDispatcher("Home.jsp").forward(request, response);
     } 
 

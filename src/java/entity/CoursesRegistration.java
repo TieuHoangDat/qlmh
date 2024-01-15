@@ -63,7 +63,7 @@ public class CoursesRegistration {
             } else {
                 grade_alpha = "P";
             }
-        }
+        }   
     }
 
     public Account getAcccount() {
